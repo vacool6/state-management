@@ -1,16 +1,14 @@
 import { Box, Button, Heading, Input, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 //
-import { add, remove, completed } from "./store/todoSlice";
-import { useDispatch, useSelector } from "react-redux";
 import TodoS from "./components/todos";
+import { useTodo } from "./context/todos";
 
 function App() {
   const [todo, setTodo] = useState("");
-
-  const dispatch = useDispatch();
+  const { todoS, setTodoS } = useTodo();
+  console.log(todoS);
   const toast = useToast();
-  const todoS = useSelector((state) => state.TODO);
 
   const addTodo = () => {
     if (!todo || todo.length < 4) {
@@ -22,7 +20,14 @@ function App() {
       });
       return;
     }
-    dispatch(add(todo));
+    setTodoS([
+      ...todoS,
+      {
+        todo,
+        isCompleted: false,
+        isEditing: false,
+      },
+    ]);
     setTodo("");
   };
 
@@ -31,9 +36,16 @@ function App() {
   };
 
   const removeTodo = (item) => {
-    dispatch(completed(item));
+    const completedTodoS = todoS.map((e) => {
+      if (item === e.todo) {
+        return { ...e, isCompleted: true };
+      }
+      return e;
+    });
+    setTodoS(completedTodoS);
     setTimeout(() => {
-      dispatch(remove(item));
+      const updatedTodoS = todoS.filter((e) => item !== e.todo);
+      setTodoS(updatedTodoS);
     }, 500);
   };
 

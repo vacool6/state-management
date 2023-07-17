@@ -1,14 +1,13 @@
 import { Button, Input, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useTodo } from "../context/todos";
 //
-import { useDispatch } from "react-redux";
-import { doneEdit, update } from "../store/todoSlice";
 
 const EditInput = ({ value, newValue }) => {
   const [updatedTodo, setUpdatedTodo] = useState("");
+  const { todoS, setTodoS } = useTodo();
   const toast = useToast();
   //
-  const dispatch = useDispatch();
 
   const updateTodo = (value) => {
     if (!updatedTodo || updatedTodo.length < 4) {
@@ -21,8 +20,14 @@ const EditInput = ({ value, newValue }) => {
       return;
     }
 
-    dispatch(doneEdit(value));
-    dispatch(update({ value, updatedTodo }));
+    const doneEditing = todoS.map((e) => {
+      if (e.todo === value) {
+        return { ...e, isEditing: false, todo: updatedTodo };
+      }
+      return e;
+    });
+
+    setTodoS(doneEditing);
   };
 
   const addValOnEnter = (val, newValue) => {

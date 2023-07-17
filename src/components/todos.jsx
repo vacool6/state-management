@@ -2,15 +2,19 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
 //
-import { edit } from "../store/todoSlice";
-import { useDispatch } from "react-redux";
 import EditInput from "./editInput";
+import { useTodo } from "../context/todos";
 
 const TodoS = ({ todoList, remove }) => {
-  const dispatch = useDispatch();
-
+  const { todoS, setTodoS } = useTodo();
   const isEditing = (value) => {
-    dispatch(edit(value));
+    const editing = todoS.map((e) => {
+      if (e.todo === value) {
+        return { ...e, isEditing: true };
+      }
+      return e;
+    });
+    setTodoS(editing);
   };
 
   return (
