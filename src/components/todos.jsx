@@ -5,17 +5,8 @@ import React from "react";
 import EditInput from "./editInput";
 import { useTodo } from "../context/todos";
 
-const TodoS = ({ todoList, remove }) => {
-  const { todoS, setTodoS } = useTodo();
-  const isEditing = (value) => {
-    const editing = todoS.map((e) => {
-      if (e.todo === value) {
-        return { ...e, isEditing: true };
-      }
-      return e;
-    });
-    setTodoS(editing);
-  };
+const TodoS = ({ todoList }) => {
+  const { removeTodo, isEditing } = useTodo();
 
   return (
     <>
@@ -59,7 +50,7 @@ const TodoS = ({ todoList, remove }) => {
                     color={"white"}
                     h={8}
                     w={8}
-                    onClick={() => remove(todoList[index].todo)}
+                    onClick={() => removeTodo(todoList[index].todo)}
                   >
                     X
                   </Button>

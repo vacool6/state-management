@@ -6,7 +6,7 @@ import { useTodo } from "./context/todos";
 
 function App() {
   const [todo, setTodo] = useState("");
-  const { todoS, setTodoS } = useTodo();
+  const { todoS, dispatch } = useTodo();
   console.log(todoS);
   const toast = useToast();
 
@@ -20,33 +20,15 @@ function App() {
       });
       return;
     }
-    setTodoS([
-      ...todoS,
-      {
-        todo,
-        isCompleted: false,
-        isEditing: false,
-      },
-    ]);
+    dispatch({ type: "ADD-TODO", todo });
     setTodo("");
   };
 
   const addValOnEnter = (val) => {
-    if (val.code === "Enter") addTodo();
-  };
-
-  const removeTodo = (item) => {
-    const completedTodoS = todoS.map((e) => {
-      if (item === e.todo) {
-        return { ...e, isCompleted: true };
-      }
-      return e;
-    });
-    setTodoS(completedTodoS);
-    setTimeout(() => {
-      const updatedTodoS = todoS.filter((e) => item !== e.todo);
-      setTodoS(updatedTodoS);
-    }, 500);
+    if (val.code === "Enter") {
+      dispatch({ type: "ADD-TODO", todo });
+      setTodo("");
+    }
   };
 
   return (
@@ -73,7 +55,7 @@ function App() {
             boxShadow={"xl"}
             bg={"gray.100"}
           >
-            <TodoS todoList={todoS} remove={removeTodo} />
+            <TodoS todoList={todoS} />
           </Box>
         ) : (
           <Text>Add todo's</Text>

@@ -5,7 +5,7 @@ import { useTodo } from "../context/todos";
 
 const EditInput = ({ value, oldValue }) => {
   const [updatedTodo, setUpdatedTodo] = useState("");
-  const { todoS, setTodoS } = useTodo();
+  const { dispatch } = useTodo();
   const toast = useToast();
   //
 
@@ -20,14 +20,7 @@ const EditInput = ({ value, oldValue }) => {
       return;
     }
 
-    const doneEditing = todoS.map((e) => {
-      if (e.todo === value) {
-        return { ...e, isEditing: false, todo: updatedTodo };
-      }
-      return e;
-    });
-
-    setTodoS(doneEditing);
+    dispatch({ type: "DONE-EDITING", todo: value, updatedTodo });
   };
 
   const addValOnEnter = (val, prevValue) => {
