@@ -32,7 +32,7 @@ const TodoS = ({ todoList, remove }) => {
             borderRadius="md"
           >
             {e.isEditing ? (
-              <EditInput value={e.todo} newValue={todoList[index].todo} />
+              <EditInput value={e.todo} oldValue={todoList[index].todo} />
             ) : (
               <>
                 <Text

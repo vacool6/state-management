@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useTodo } from "../context/todos";
 //
 
-const EditInput = ({ value, newValue }) => {
+const EditInput = ({ value, oldValue }) => {
   const [updatedTodo, setUpdatedTodo] = useState("");
   const { todoS, setTodoS } = useTodo();
   const toast = useToast();
@@ -30,8 +30,8 @@ const EditInput = ({ value, newValue }) => {
     setTodoS(doneEditing);
   };
 
-  const addValOnEnter = (val, newValue) => {
-    if (val.code === "Enter") updateTodo(newValue);
+  const addValOnEnter = (val, prevValue) => {
+    if (val.code === "Enter") updateTodo(prevValue);
   };
 
   return (
@@ -41,13 +41,13 @@ const EditInput = ({ value, newValue }) => {
         value={updatedTodo}
         placeholder={value}
         onChange={(e) => setUpdatedTodo(e.target.value)}
-        onKeyDown={(e) => addValOnEnter(e, newValue)}
+        onKeyDown={(e) => addValOnEnter(e, oldValue)}
       />
       <Button
         bg="green.500"
         color={"white"}
         h={8}
-        onClick={() => updateTodo(newValue)}
+        onClick={() => updateTodo(oldValue)}
         mx={2}
       >
         Done
