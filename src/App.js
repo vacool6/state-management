@@ -1,12 +1,12 @@
 import { Box, Button, Heading, Input, Text, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 //
 import TodoS from "./components/todos";
-import { useTodo } from "./context/todos";
+import { todoReducer } from "./reducers/todoReducer";
 
 function App() {
   const [todo, setTodo] = useState("");
-  const { todoS, setTodoS } = useTodo();
+  const [todoS, dispatch] = useReducer(todoReducer, []);
   console.log(todoS);
   const toast = useToast();
 
@@ -20,34 +20,29 @@ function App() {
       });
       return;
     }
-    setTodoS([
-      ...todoS,
-      {
-        todo,
-        isCompleted: false,
-        isEditing: false,
-      },
-    ]);
+    dispatch({ type: "ADD-TODO", todo });
     setTodo("");
   };
 
   const addValOnEnter = (val) => {
-    if (val.code === "Enter") addTodo();
+    if (val.code === "Enter") {
+      dispatch({ type: "ADD-TODO", todo });
+      setTodo("");
+    }
   };
 
   const removeTodo = (item) => {
-    const completedTodoS = todoS.map((e) => {
-      if (item === e.todo) {
-        return { ...e, isCompleted: true };
-      }
-      return e;
-    });
-    setTodoS(completedTodoS);
-    setTimeout(() => {
-      const updatedTodoS = todoS.filter((e) => item !== e.todo);
-      setTodoS(updatedTodoS);
-    }, 500);
+    dispatch({ type: "COMPLETE-TODO", todo: item });
+    setTimeout(() => dispatch({ type: "REMOVE-TODO", todo: item }), 500);
   };
+
+  const isEditing = (value) => {
+    dispatch({ type: "IS-EDITING", todo: value });
+  };
+
+  const doneEditing = useCallback((todo, updatedTodo) => {
+    dispatch({ type: "DONE-EDITING", todo, updatedTodo });
+  }, []);
 
   return (
     <>
@@ -73,7 +68,12 @@ function App() {
             boxShadow={"xl"}
             bg={"gray.100"}
           >
-            <TodoS todoList={todoS} remove={removeTodo} />
+            <TodoS
+              todoList={todoS}
+              remove={removeTodo}
+              isEditing={isEditing}
+              doneEditing={doneEditing}
+            />
           </Box>
         ) : (
           <Text>Add todo's</Text>

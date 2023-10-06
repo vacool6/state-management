@@ -3,20 +3,8 @@ import React from "react";
 
 //
 import EditInput from "./editInput";
-import { useTodo } from "../context/todos";
 
-const TodoS = ({ todoList, remove }) => {
-  const { todoS, setTodoS } = useTodo();
-  const isEditing = (value) => {
-    const editing = todoS.map((e) => {
-      if (e.todo === value) {
-        return { ...e, isEditing: true };
-      }
-      return e;
-    });
-    setTodoS(editing);
-  };
-
+const TodoS = ({ todoList, remove, isEditing, doneEditing }) => {
   return (
     <>
       {todoList.map((e, index) => (
@@ -32,7 +20,11 @@ const TodoS = ({ todoList, remove }) => {
             borderRadius="md"
           >
             {e.isEditing ? (
-              <EditInput value={e.todo} newValue={todoList[index].todo} />
+              <EditInput
+                value={e.todo}
+                oldValue={todoList[index].todo}
+                doneEditing={doneEditing}
+              />
             ) : (
               <>
                 <Text
