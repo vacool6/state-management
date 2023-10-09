@@ -1,17 +1,21 @@
 # Comparing State management with simple todo application
 
 Managing / Accessing states on global level can be accomplished by
-using in-build state management via `Context API` or by any extrnal libraries like : `Redux toolkit`, `Zoostand` etc.
+using in-build state management via `Context API`, `useReducer` or by any extrnal libraries like : `Redux toolkit`, `Zoostand` etc.
 
-In this project we compare state management techniques using context API and Redux toolkit.
+In this project we compare state management techniques using context API, useReducer and Redux toolkit.
 
 ## Setup
 
-There are 2 branches:
+There are 4 branches:
 
 1 ) `on/reduxToolkit` : On this branch Todo app is implemented using Redux toolkit.  
 
-2 ) `on/contextAPI` : On this branch Todo app is implemented using Context API.  
+2 ) `on/contextAPI` : On this branch Todo app is implemented using Context API. 
+
+3 ) `on/useReducer` :  On this branch Todo app is implemented using useReducer hook. 
+
+4 ) `club/context+reducer` : On this branch Todo app is implemented using Context API & useReducer hook. 
 
 ## Getting started
 
